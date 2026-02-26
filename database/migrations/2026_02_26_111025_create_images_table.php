@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
+            $table->binary('data');
+            $table->string('extension');
+            $table->foreignId('article_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
