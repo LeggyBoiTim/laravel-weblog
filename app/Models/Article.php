@@ -16,6 +16,7 @@ class Article extends Model
     protected $fillable = [
         'title',
         'content',
+        'is_premium',
         'user_id',
     ];
 
