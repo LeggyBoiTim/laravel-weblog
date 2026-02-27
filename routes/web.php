@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
@@ -10,6 +12,7 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('art
 Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
 Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
 Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-
-// We voegen ook een redirect toe aan de routes die de hoofdpagina doorverwijst naar de '/articles' route
 Route::redirect('/', '/articles');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.create');
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');

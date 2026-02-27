@@ -12,6 +12,6 @@
         <label for="content">Content:</label>
         <textarea id="content" name="content"></textarea>
         <br>
-        <button type="submit">Save</button>
+        <button type="submit">Post</button>
     </form>
 @endsection
