@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class RegisteredUserController extends Controller
+class SessionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('auth.login');
     }
 
     /**
@@ -32,21 +29,19 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', Password::defaults(), 'confirmed'],
+        $validated = $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        if (Auth::attempt($validated)) {
+            $request->session()->regenerate();
+            return redirect()->route('articles.index');
+        };
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
         ]);
-
-        Auth::login($user);
-
-        return redirect()->route('articles.index');
     }
 
     /**
@@ -76,8 +71,9 @@ class RegisteredUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
-        //
+        Auth::logout();
+        return redirect()->route('articles.index');
     }
 }

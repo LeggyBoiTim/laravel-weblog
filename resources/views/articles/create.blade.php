@@ -7,10 +7,10 @@
     <form action="{{ route('articles.store') }}" method="POST">
         @csrf
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+        <input style="margin-bottom: 1em;" type="text" id="title" name="title" required>
         <br>
         <label for="content">Content:</label>
-        <textarea id="content" name="content"></textarea>
+        <textarea style="margin-bottom: 1em; width: 100%; height: 20em;" id="content" name="content"></textarea>
         <br>
         <button type="submit">Post</button>
     </form>

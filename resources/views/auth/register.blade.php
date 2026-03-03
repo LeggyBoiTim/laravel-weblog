@@ -15,6 +15,9 @@
         <label for="password">Password:</label>
         <input style="margin-bottom: 1em; width: 10%;" type="password" id="password" name="password" required>
         <br>
+        <label for="password_confirmation">Confirm Password:</label>
+        <input style="margin-bottom: 1em; width: 10%;" type="password" id="password_confirmation" name="password_confirmation" required>
+        <br>
         <button type="submit">Register</button>
     </form>
 @endsection

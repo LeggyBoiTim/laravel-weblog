@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -61,7 +62,7 @@ class ArticleController extends Controller
     {
         $article->title = $request->input('title');
         $article->content = $request->input('content');
-        // $article->user_id = auth()->id(); Put authentication in place before using this line.
+        $article->user_id = Auth::id(); // Doesn't work yet.
         $article->save();
         return redirect()->route('articles.index');
     }

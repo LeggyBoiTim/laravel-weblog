@@ -14,10 +14,10 @@ class Article extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'title',
         'content',
         'is_premium',
-        'user_id',
     ];
 
     public function image(): HasOne
