@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Auth::user()->articles;
         $sortedArticles = $articles->sortByDesc('created_at');
         return view('articles.index', compact('sortedArticles'));
     }
@@ -29,13 +30,14 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $article = new Article();
-        $article->title = $request->input('title');
-        $article->content = $request->input('content');
-        // $article->user_id = auth()->id(); Put authentication in place before using this line.
-        $article->save();
+        Article::create([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+
         return redirect()->route('articles.index');
     }
 
@@ -58,13 +60,15 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $article->title = $request->input('title');
-        $article->content = $request->input('content');
-        $article->user_id = Auth::id(); // Doesn't work yet.
-        $article->save();
-        return redirect()->route('articles.index');
+        $article->update([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('articles.show', $article);
     }
 
     /**
