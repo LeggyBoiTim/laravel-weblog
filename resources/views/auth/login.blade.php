@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
+@section('title', 'Log in')
 
 @section('content')
-    <h1>Login</h1>
+    <h1>Log in</h1>
     <form action="{{ route('login.store') }}" method="POST">
         @csrf
         <label for="email">Email:</label>

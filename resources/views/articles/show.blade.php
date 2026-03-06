@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
+@section('title', $article->title)
 
 @section('content')
     <h1 style="margin-bottom: 0;">{{ $article->title }}</h1>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        $sortedCategories = $categories->sortBy('name');
-        return view('categories.index', compact('sortedCategories'), ['title' => 'All Categories']);
+        //
     }
 
     /**
@@ -24,7 +23,7 @@ class CategoryController extends Controller
     public function myCategories()
     {
         $categories = Auth::user()->categories;
-        $sortedCategories = $categories->sortBy('name');
+        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
         return view('categories.index', compact('sortedCategories'), ['title' => 'My Categories']);
     }
 
@@ -39,9 +38,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+            Category::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('categories.my-categories');
     }
 
     /**

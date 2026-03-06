@@ -47,7 +47,7 @@ class ArticleController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->route('articles.index');
+        return redirect()->route('articles.my-articles');
     }
 
     /**
@@ -86,6 +86,6 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->delete();
-        return redirect()->route('articles.index');
+        return redirect()->route('articles.my-articles');
     }
 }
