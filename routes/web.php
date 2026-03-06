@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SessionsController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
     Route::redirect('/', '/articles');
+
+    Route::get('/my-categories', [CategoryController::class, 'myCategories'])->name('categories.my-categories');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{article}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::get('/categories/{article}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{article}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{article}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     

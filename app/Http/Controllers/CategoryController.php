@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -11,7 +13,19 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        $sortedCategories = $categories->sortBy('name');
+        return view('categories.index', compact('sortedCategories'), ['title' => 'All Categories']);
+    }
+
+    /**
+     * Display a listing of the resource belonging to the user.
+     */
+    public function myCategories()
+    {
+        $categories = Auth::user()->categories;
+        $sortedCategories = $categories->sortBy('name');
+        return view('categories.index', compact('sortedCategories'), ['title' => 'My Categories']);
     }
 
     /**

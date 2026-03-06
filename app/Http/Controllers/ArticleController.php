@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
@@ -16,7 +15,7 @@ class ArticleController extends Controller
     {
         $articles = Article::all();
         $sortedArticles = $articles->sortByDesc('created_at');
-        return view('articles.index', compact('sortedArticles'));
+        return view('articles.index', compact('sortedArticles'), ['title' => 'All Articles']);
     }
 
     /**
@@ -26,7 +25,7 @@ class ArticleController extends Controller
     {
         $articles = Auth::user()->articles;
         $sortedArticles = $articles->sortByDesc('created_at');
-        return view('articles.my-articles', compact('sortedArticles'));
+        return view('articles.index', compact('sortedArticles'), ['title' => 'My Articles']);
     }
 
     /**

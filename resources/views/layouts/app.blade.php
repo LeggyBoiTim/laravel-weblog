@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>App Name - @yield('title')</title>
+    <title>Weblog - @yield('title')</title>
 </head>
 <body>
     @include('partials.nav')
