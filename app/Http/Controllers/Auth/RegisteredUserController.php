@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('articles.index');
+        return redirect()->route('articles.my-articles');
     }
 
     /**

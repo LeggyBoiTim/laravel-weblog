@@ -36,7 +36,7 @@ class SessionsController extends Controller
 
         if (Auth::attempt($validated)) {
             $request->session()->regenerate();
-            return redirect()->route('articles.index');
+            return redirect()->route('articles.my-articles');
         };
 
         return back()->withErrors([

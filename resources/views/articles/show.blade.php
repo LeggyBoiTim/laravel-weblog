@@ -7,7 +7,7 @@
     <small>Posted by: {{ $article->user->name }}</small>
     <small style="margin-left: 1em;">Posted at: {{ $article->created_at->format('Y-m-d H:i') }}</small>
     <p>{{ $article->content }}</p>
-    <a href="{{ route('articles.index') }}"><button>Back to My Articles</button></a>
+    <a href="{{ route('articles.my-articles') }}"><button>Back to My Articles</button></a>
     <a href="{{ route('articles.edit', $article) }}"><button>Edit</button></a>
     <form action="{{ route('articles.destroy', $article) }}" method="POST" style="display: inline;">
         @csrf

@@ -3,7 +3,7 @@
 @section('title', 'Page Title')
 
 @section('content')
-    <h1>All Articles</h1>
+    <h1>My Articles</h1>
     <table style="border-collapse: collapse;">
         <tbody>
             @forelse ($sortedArticles as $article)

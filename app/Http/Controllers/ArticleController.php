@@ -14,9 +14,19 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Auth::user()->articles;
+        $articles = Article::all();
         $sortedArticles = $articles->sortByDesc('created_at');
         return view('articles.index', compact('sortedArticles'));
+    }
+
+    /**
+     * Display a listing of the resource belonging to the user.
+     */
+    public function myArticles()
+    {
+        $articles = Auth::user()->articles;
+        $sortedArticles = $articles->sortByDesc('created_at');
+        return view('articles.my-articles', compact('sortedArticles'));
     }
 
     /**
