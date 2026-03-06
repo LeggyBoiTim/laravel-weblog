@@ -14,14 +14,6 @@
                         <small>Posted by: {{ $article->user->name }}</small>
                         <small style="margin-left: 1em;">Posted at: {{ $article->created_at->format('Y-m-d H:i') }}</small>
                     </td>
-                    <td><a href="{{ route('articles.edit', $article->id) }}"><button style="margin: 0.2em;">Edit</button></a></td>
-                    <td>
-                        <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
                 </tr>
             @empty
                 <tr>
