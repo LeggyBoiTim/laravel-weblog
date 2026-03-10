@@ -14,6 +14,11 @@
         @forelse ($sortedCategories as $category)
             <div style="float: left; border: 2px solid #555; border-radius: 1em; background-color: #ddd; width:fit-content; height: 1em; padding: 0.5em; margin-right: 0.5em; margin-top: 0.5em; font-weight: bold;">
                 {{ $category->name }}
+                <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="background: none; border: none; color: black; font-weight: bold; cursor: pointer;">&times;</button>
+                </form>
             </div>
         @empty
             <p>No categories found.</p>

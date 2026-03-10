@@ -6,6 +6,13 @@
     <h1 style="margin-bottom: 0;">{{ $article->title }}</h1>
     <small>Posted by: {{ $article->user->name }}</small>
     <small style="margin-left: 1em;">Posted at: {{ $article->created_at->format('Y-m-d H:i') }}</small>
+    <small style="margin-left: 1em;">Categories: 
+        @forelse ($article->categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE) as $category)
+            <a href="{{ route('categories.show', $category) }}">{{ $category->name }}</a>{{ !$loop->last ? ',' : '' }}
+        @empty
+            No categories
+        @endforelse
+    </small>
     <p>{{ $article->content }}</p>
     <a href="{{ route('articles.my-articles') }}"><button>Back to My Articles</button></a>
     <a href="{{ route('articles.edit', $article) }}"><button>Edit</button></a>

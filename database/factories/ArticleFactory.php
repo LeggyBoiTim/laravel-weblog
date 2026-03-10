@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Article;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,5 +24,12 @@ class ArticleFactory extends Factory
             'title' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Article $article) {
+            $article->categories()->attach($article->user->categories()->inRandomOrder()->limit(rand(1, 5))->get());
+        });
     }
 }

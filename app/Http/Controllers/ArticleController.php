@@ -33,7 +33,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create');
+        return view('articles.create', ['categories' => Auth::user()->categories]);
     }
 
     /**
@@ -45,7 +45,7 @@ class ArticleController extends Controller
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
-        ]);
+        ])->categories()->attach($request->categories);
 
         return redirect()->route('articles.my-articles');
     }
@@ -63,7 +63,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('articles.edit', compact('article'));
+        return view('articles.edit', ['categories' => Auth::user()->categories], compact('article'));
     }
 
     /**
@@ -76,6 +76,7 @@ class ArticleController extends Controller
             'title' => $request->title,
             'content' => $request->content,
         ]);
+        $article->categories()->sync($request->categories);
 
         return redirect()->route('articles.show', $article);
     }
