@@ -4,6 +4,20 @@
 
 @section('content')
     <h1>{{ $title }}</h1>
+
+    <label for="categoryFilter">Filter by category:</label>
+    <select id="categoryFilter" onchange="window.location.href = this.value">
+        <option value="{{ route('articles.index') }}">All Categories</option>
+        @forelse ($sortedCategories as $category)
+            <option value="{{ route('categories.show', $category) }}" {{ request()->routeIs('categories.show') && request()->route('category') === $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @empty
+            <option disabled>No categories available</option>
+        @endforelse
+    </select>
+    <br><br>
+
     @forelse ($sortedArticles as $article)
         <div style="height: 3em;">
             <a style="margin-right: 0.5em;" href="{{ route('articles.show', $article) }}">{{ $article->title }}</a>

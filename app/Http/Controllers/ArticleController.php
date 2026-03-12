@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
 {
@@ -15,7 +17,9 @@ class ArticleController extends Controller
     {
         $articles = Article::all();
         $sortedArticles = $articles->sortByDesc('created_at');
-        return view('articles.index', compact('sortedArticles'), ['title' => 'All Articles']);
+        $categories = Category::all();
+        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
+        return view('articles.index', ['title' => 'All Articles'], compact('sortedArticles', 'sortedCategories'));
     }
 
     /**
@@ -25,7 +29,9 @@ class ArticleController extends Controller
     {
         $articles = Auth::user()->articles;
         $sortedArticles = $articles->sortByDesc('created_at');
-        return view('articles.index', compact('sortedArticles'), ['title' => 'My Articles']);
+        $categories = Auth::user()->categories;
+        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
+        return view('articles.index', ['title' => 'My Articles'], compact('sortedArticles', 'sortedCategories'));
     }
 
     /**
@@ -63,6 +69,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        Gate::authorize('update', $article);
+
         return view('articles.edit', ['categories' => Auth::user()->categories], compact('article'));
     }
 
@@ -71,6 +79,8 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
+        Gate::authorize('update', $article);
+
         $article->update([
             'user_id' => Auth::id(),
             'title' => $request->title,
@@ -86,6 +96,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        Gate::authorize('delete', $article);
+
         $article->delete();
         return redirect()->route('articles.my-articles');
     }

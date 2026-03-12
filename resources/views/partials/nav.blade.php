@@ -4,6 +4,9 @@
         <a href="{{ route('articles.my-articles') }}"><button>My Articles</button></a>
         <a href="{{ route('articles.create') }}"><button>New Article</button></a>
         <a href="{{ route('categories.my-categories') }}"><button>My Categories</button></a>
+        @can('view-admin')
+            <a href="{{ route('admin') }}"><button>Admin</button></a>
+        @endcan
         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')

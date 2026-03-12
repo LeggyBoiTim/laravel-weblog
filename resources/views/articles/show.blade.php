@@ -13,14 +13,18 @@
             No categories
         @endforelse
     </small>
+
     <p>{{ $article->content }}</p>
+
     <a href="{{ route('articles.my-articles') }}"><button>Back to My Articles</button></a>
-    <a href="{{ route('articles.edit', $article) }}"><button>Edit</button></a>
-    <form action="{{ route('articles.destroy', $article) }}" method="POST" style="display: inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit">Delete</button>
-    </form>
+    @if (Auth::id() === $article->user_id)
+        <a href="{{ route('articles.edit', $article) }}"><button>Edit</button></a>
+        <form action="{{ route('articles.destroy', $article) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
+        </form>
+    @endif
     <hr>
 
     <h2>Comments</h2>
@@ -37,10 +41,21 @@
     <br>
 
     @forelse($article->comments as $comment)
-        <div>
-            <small style="font-weight: bold;">{{ $comment->user->name }}</small>
-            <small style="margin-left: 0.2em;">{{ $comment->created_at->diffForHumans() }}</small>
-            <p style="margin-top: 0;">{{ $comment->content }}</p>
+        <div style="display: flex; align-items: center;">
+            <div style="margin-right: 1em;">
+                <small style="font-weight: bold;">{{ $comment->user->name }}</small>
+                <small style="margin-left: 0.2em;">{{ $comment->created_at->diffForHumans() }}</small>
+                <p style="margin-top: 0;">{{ $comment->content }}</p>
+            </div>
+            <div>
+                @if (Auth::id() === $comment->user_id)
+                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Delete</button>
+                    </form>
+                @endif
+            </div>
         </div>
     @empty
         <p>No comments yet.</p>

@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     
     Route::delete('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });

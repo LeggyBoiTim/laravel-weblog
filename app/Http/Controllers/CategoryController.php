@@ -51,9 +51,13 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        $articles = $category->articles;
+        $sortedArticles = $articles->sortByDesc('created_at');
+        $categories = Category::all();
+        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
+        return view('articles.index', ['title' => 'Articles with the category: ' . $category->name], compact('sortedArticles', 'sortedCategories'));
     }
 
     /**
