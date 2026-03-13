@@ -30,6 +30,10 @@ class ArticleFactory extends Factory
     {
         return $this->afterCreating(function (Article $article) {
             $article->categories()->attach($article->user->categories()->inRandomOrder()->limit(rand(1, 5))->get());
+            if ($article->user->has_premium) {
+                $article->is_premium = rand(0, 1);
+                $article->save();
+            }
         });
     }
 }
