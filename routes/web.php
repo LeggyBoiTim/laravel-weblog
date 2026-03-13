@@ -5,11 +5,13 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::get('/my-articles', [ArticleController::class, 'myArticles'])->name('articles.my-articles');
+    Route::get('/premium-articles', [ArticleController::class, 'premiumArticles'])->name('articles.premium-articles');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
@@ -28,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::post('/upgrade-premium', [UserController::class, 'upgradeToPremium'])->name('users.upgrade-premium');
     
     Route::delete('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });

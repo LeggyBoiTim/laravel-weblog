@@ -35,6 +35,14 @@
         </div>
         <br>
     @empty
-        <p>No articles found.</p>
+        @if (request()->routeIs('articles.premium-articles') && !Auth::user()->has_premium)
+            <p style="margin-top: 0;">No access to premium articles.</p>
+            <form action="{{ route('users.upgrade-premium') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit">Upgrade to Premium</button>
+            </form>
+        @else
+            <p style="margin: 0;">No articles found.</p>
+        @endif
     @endforelse
 @endsection

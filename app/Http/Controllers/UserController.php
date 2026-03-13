@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -12,6 +13,15 @@ class UserController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Updates the user's premium status to true.
+     */
+    public function upgradeToPremium()
+    {
+        Auth::user()->update(['has_premium' => true]);
+        return redirect()->back();
     }
 
     /**

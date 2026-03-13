@@ -35,6 +35,18 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display a listing of the resource marked as premium.
+     */
+    public function premiumArticles()
+    {
+        $articles = Article::where('is_premium', true)->get();
+        $sortedArticles = $articles->sortByDesc('created_at');
+        $categories = Category::all();
+        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
+        return view('articles.index', ['title' => 'Premium Articles'], compact('sortedArticles', 'sortedCategories'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
