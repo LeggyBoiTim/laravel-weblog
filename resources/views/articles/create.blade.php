@@ -4,11 +4,13 @@
 
 @section('content')
     <h1>New Article</h1>
-    <form action="{{ route('articles.store') }}" method="POST">
+
+    <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="title">Title:</label>
         <input style="margin-bottom: 1em;" type="text" id="title" name="title" required>
         <br>
+
         @if ($categories->isEmpty())
             <label>Categories: No categories available.</label>
             <br>
@@ -21,9 +23,15 @@
             <br>
         @endif
         <br>
+
         <label for="content">Content:</label>
         <textarea style="margin-bottom: 1em; width: 100%; height: 20em;" id="content" name="content"></textarea>
         <br>
+
+        <label for="image">Upload image:</label>
+        <input style="margin-bottom: 1em;" type="file" id="image" name="image" accept="image/*" title="Upload an image">
+        <br>
+        
         <button type="submit">Post</button>
     </form>
 @endsection

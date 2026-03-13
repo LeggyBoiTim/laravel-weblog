@@ -14,6 +14,12 @@
         @endforelse
     </small>
 
+    @if ($article->image_path)
+        <div style="margin-top: 1em;">
+            <img src="{{ asset('storage/' . $article->image_path) }}" alt="Article Image" style="max-width: 100%; height: auto;">
+        </div>
+    @endif
+
     <p>{{ $article->content }}</p>
 
     <a href="{{ route('articles.my-articles') }}"><button>Back to My Articles</button></a>

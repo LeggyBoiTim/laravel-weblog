@@ -47,10 +47,13 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
+        $imagePath = $request->file('image')->store('images', 'public');
+
         Article::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
+            'image_path' => $imagePath,
         ])->categories()->attach($request->categories);
 
         return redirect()->route('articles.my-articles');
@@ -81,11 +84,17 @@ class ArticleController extends Controller
     {
         Gate::authorize('update', $article);
 
-        $article->update([
+        $updateData = [
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $updateData['image_path'] = $request->file('image')->store('images', 'public');
+        }
+
+        $article->update($updateData);
         $article->categories()->sync($request->categories);
 
         return redirect()->route('articles.show', $article);

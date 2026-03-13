@@ -17,6 +17,7 @@ class Article extends Model
         'user_id',
         'title',
         'content',
+        'image_path',
         'is_premium',
     ];
 
