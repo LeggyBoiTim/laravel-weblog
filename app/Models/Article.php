@@ -21,11 +21,6 @@ class Article extends Model
         'is_premium',
     ];
 
-    public function image(): HasOne
-    {
-        return $this->hasOne(Image::class);
-    }
-
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);

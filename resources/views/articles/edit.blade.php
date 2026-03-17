@@ -9,29 +9,34 @@
         @csrf
         @method('PUT')
         <label for="title">Title:</label>
-        <input style="margin-bottom: 1em;" type="text" id="title" name="title" value="{{ $article->title }}" required>
-        <br>
+        <input type="text" id="title" name="title" value="{{ $article->title }}" required>
+        <br><br>
 
         @if ($categories->isEmpty())
-            <label>Categories: No categories available.</label>
-            <br>
+            <span>Categories: No categories available.</span>
+            <br><br>
         @else
-            <label>Categories:</label>
+            <span>Categories:</span>
             @foreach ($categories as $category)
                 <input style="margin-right: 0em;" type="checkbox" id="category-{{ $category->id }}" name="categories[]" value="{{ $category->id }}" {{ $article->categories->contains($category) ? 'checked' : '' }}>
                 <label style="margin-right: 0.5em;" for="category-{{ $category->id }}">{{ $category->name }}</label>
             @endforeach
-            <br>
+            <br><br>
         @endif
-        <br>
+        
+        @if (Auth::user()->has_premium)
+            <label for="is_premium">Premium:</label>
+            <input type="checkbox" id="is_premium" name="is_premium" value="1" {{ $article->is_premium ? 'checked' : '' }}>
+            <br><br>
+        @endif
 
         <label for="content">Content:</label>
-        <textarea style="margin-bottom: 1em; width: 100%; height: 20em;" id="content" name="content">{{ $article->content }}</textarea>
-        <br>
+        <textarea style="width: 100%; height: 20em;" id="content" name="content">{{ $article->content }}</textarea>
+        <br><br>
         
-        <label for="image">Upload image:</label>
-        <input style="margin-bottom: 1em;" type="file" id="image" name="image" accept="image/*" title="Upload an image">
-        <br>
+        <label for="image">{{ $article->image_path ? 'Update' : 'Upload' }} image:</label>
+        <input type="file" id="image" name="image" accept="image/*" title="Upload image">
+        <br><br>
 
         <button type="submit">Save</button>
     </form>

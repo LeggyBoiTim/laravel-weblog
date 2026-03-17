@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -59,13 +60,18 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-        $imagePath = $request->file('image')->store('images', 'public');
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        } else {
+            $imagePath = null;
+        }
 
         Article::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
             'image_path' => $imagePath,
+            'is_premium' => $request->is_premium ? true : false,
         ])->categories()->attach($request->categories);
 
         return redirect()->route('articles.my-articles');
@@ -76,6 +82,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        if ($article->is_premium && !Auth::user()->has_premium) {
+            abort(403, 'No access to premium articles.');
+        }
         return view('articles.show', compact('article'));
     }
 
@@ -100,9 +109,13 @@ class ArticleController extends Controller
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
+            'is_premium' => $request->is_premium ? true : false,
         ];
 
         if ($request->hasFile('image')) {
+            if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
+                Storage::disk('public')->delete($article->image_path);
+            }
             $updateData['image_path'] = $request->file('image')->store('images', 'public');
         }
 
@@ -119,7 +132,26 @@ class ArticleController extends Controller
     {
         Gate::authorize('delete', $article);
 
+        if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
+            Storage::disk('public')->delete($article->image_path);
+        }
+
         $article->delete();
         return redirect()->route('articles.my-articles');
+    }
+
+    /**
+     * Remove the image from the specified resource.
+     */
+    public function destroyImage(Article $article)
+    {
+        Gate::authorize('update', $article);
+
+        if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
+            Storage::disk('public')->delete($article->image_path);
+        }
+        $article->update(['image_path' => null]);
+
+        return redirect()->route('articles.show', $article);
     }
 }

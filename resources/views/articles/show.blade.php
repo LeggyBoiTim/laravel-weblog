@@ -3,7 +3,7 @@
 @section('title', $article->title)
 
 @section('content')
-    <h1 style="margin-bottom: 0;">{{ $article->title }}</h1>
+    <h1 style="margin-bottom: 0;">{{ $article->title }} @if ($article->is_premium)<span style="color: gold; font-weight: bold;">[Premium]</span>@endif</h1>
     <small>Posted by: {{ $article->user->name }}</small>
     <small style="margin-left: 1em;">Posted at: {{ $article->created_at->format('Y-m-d H:i') }}</small>
     <small style="margin-left: 1em;">Categories: 
@@ -13,9 +13,10 @@
             No categories
         @endforelse
     </small>
+    <br>
 
     @if ($article->image_path)
-        <div style="margin-top: 1em;">
+        <div>
             <img src="{{ asset('storage/' . $article->image_path) }}" alt="Article Image" style="max-width: 100%; height: auto;">
         </div>
     @endif
@@ -30,6 +31,13 @@
             @method('DELETE')
             <button type="submit">Delete</button>
         </form>
+        @if ($article->image_path)
+            <form action="{{ route('articles.destroy-image', $article) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Delete Image</button>
+            </form>
+        @endif
     @endif
     <hr>
 
@@ -64,6 +72,6 @@
             </div>
         </div>
     @empty
-        <p>No comments yet.</p>
+        <p style="margin-top: 0;">No comments yet.</p>
     @endforelse
 @endsection
