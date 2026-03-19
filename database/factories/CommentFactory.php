@@ -18,9 +18,17 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
+        $article = Article::inRandomOrder()->first();
+
+        if ($article->is_premium) {
+            $user = User::where('has_premium', true)->inRandomOrder()->first();
+        } else {
+            $user = User::inRandomOrder()->first();
+        }
+
         return [
-            'article_id' => Article::inRandomOrder()->first()->id,
-            'user_id' => User::inRandomOrder()->first()->id,
+            'article_id' => $article->id,
+            'user_id' => $user->id,
             'content' => $this->faker->sentence(),
         ];
     }
