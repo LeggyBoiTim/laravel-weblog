@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource belonging to the user.
      */
-    public function myCategories()
+    public function index()
     {
         $categories = Auth::user()->categories;
         $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
@@ -23,7 +24,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-            Category::create([
+        Category::create([
             'user_id' => Auth::id(),
             'name' => $request->name,
         ]);
@@ -48,6 +49,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        Gate::authorize('delete', $category);
+
         $category->delete();
         return redirect()->route('categories.my-categories');
     }

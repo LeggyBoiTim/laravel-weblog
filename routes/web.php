@@ -1,27 +1,32 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ArticlePremiumController;
+use App\Http\Controllers\ArticleUserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-    Route::get('/my-articles', [ArticleController::class, 'myArticles'])->name('articles.my-articles');
-    Route::get('/premium-articles', [ArticleController::class, 'premiumArticles'])->name('articles.premium-articles');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
     Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
     Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-    Route::delete('/articles/{article}/destroy-image', [ArticleController::class, 'destroyImage'])->name('articles.destroy-image');
     Route::redirect('/', '/articles');
+    
+    Route::get('/my-articles', [ArticleUserController::class, 'index'])->name('articles.my-articles');
+    Route::get('/premium-articles', [ArticlePremiumController::class, 'index'])->name('articles.premium-articles');
+    
+    Route::delete('/articles/{article}/destroy-image', [ImageController::class, 'destroy'])->name('articles.destroy-image');
 
-    Route::get('/my-categories', [CategoryController::class, 'myCategories'])->name('categories.my-categories');
+    Route::get('/my-categories', [CategoryController::class, 'index'])->name('categories.my-categories');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');

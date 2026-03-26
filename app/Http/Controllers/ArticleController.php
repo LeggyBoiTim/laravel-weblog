@@ -24,30 +24,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display a listing of the resource belonging to the user.
-     */
-    public function myArticles()
-    {
-        $articles = Auth::user()->articles;
-        $sortedArticles = $articles->sortByDesc('created_at');
-        $categories = Auth::user()->categories;
-        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
-        return view('articles.index', ['title' => 'My Articles'], compact('sortedArticles', 'sortedCategories'));
-    }
-
-    /**
-     * Display a listing of the resource marked as premium.
-     */
-    public function premiumArticles()
-    {
-        $articles = Article::where('is_premium', true)->get();
-        $sortedArticles = $articles->sortByDesc('created_at');
-        $categories = Category::all();
-        $sortedCategories = $categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE);
-        return view('articles.index', ['title' => 'Premium Articles'], compact('sortedArticles', 'sortedCategories'));
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -138,20 +114,5 @@ class ArticleController extends Controller
 
         $article->delete();
         return redirect()->route('articles.my-articles');
-    }
-
-    /**
-     * Remove the image from the specified resource.
-     */
-    public function destroyImage(Article $article)
-    {
-        Gate::authorize('update', $article);
-
-        if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
-            Storage::disk('public')->delete($article->image_path);
-        }
-        $article->update(['image_path' => null]);
-
-        return redirect()->route('articles.show', $article);
     }
 }
